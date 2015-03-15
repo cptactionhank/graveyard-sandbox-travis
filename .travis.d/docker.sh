@@ -55,5 +55,11 @@ mkdir -p /run/resolvconf
 echo 'nameserver 8.8.8.8' > /run/resolvconf/resolv.conf
 mount --bind /run/resolvconf/resolv.conf /etc/resolv.conf
 
+echo "Whats the IP"
+
+ip addr
+
+ifconfig
+
 # Start docker daemon
-docker -d -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock &> /dev/null
+docker -d -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
