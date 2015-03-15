@@ -14,7 +14,6 @@ before_install:
   - sudo chmod +x /usr/sbin/policy-rc.d
 
 install:
-  - bundle install
   - sudo apt-get -y update
   - sudo apt-get -y install lxc-docker-1.4.1 slirp
   - sudo sudo usermod -aG docker "$USER"
