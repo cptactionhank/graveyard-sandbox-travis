@@ -25,4 +25,4 @@ before_script:
 
 script:
   - "docker run -ti --publish 8000:8000 --volume $(pwd):/app_data --workdir /app_data centos python -m SimpleHTTPServer 8000 &"
-  - "curl -L $(HOST_IP):8000"
+  - "curl -L $HOST_IP:8000"
