@@ -29,5 +29,7 @@ script:
   - sleep 5
   - docker ps -a
   - docker logs $(docker ps -aq)
+  - ip addr
+  - ifconfig
   - curl -L localhost:8000 || true
-  - "curl -L http://$(/sbin/ifconfig venet0:0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'):8000"
+  - "curl -L http://$(/sbin/ifconfig venet0:0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}'):8000 || true"
