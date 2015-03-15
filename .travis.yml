@@ -1,6 +1,4 @@
 language: bash
-# rvm:
-  # - 2.2.0
 
 env:
   global:
