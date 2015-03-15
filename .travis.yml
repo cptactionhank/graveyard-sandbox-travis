@@ -26,4 +26,4 @@ before_script:
 
 script:
   - "docker run -d --publish 8000:8000 --volume $(pwd):/app_data --workdir /app_data centos python -m SimpleHTTPServer 8000"
-  - "sleep 5 && curl -L $HOST_IP:8000"
+  - "sleep 5 && curl -L localhost:8000"
