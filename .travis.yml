@@ -20,8 +20,8 @@ install:
   - chmod +x linux
 
 before_script:
-  - "./linux quiet mem=2G rootfstype=hostfs rw eth0=slirp,,/usr/bin/slirp-fullbolt init=$(pwd)/.travis.d/docker.sh WORKDIR=$(pwd) HOME=$(pwd) PATH=$PATH &"
-  - "while ! docker info &> /dev/null ; do sleep 1; done"
+  - "./linux mem=2G rootfstype=hostfs rw eth0=slirp,,/usr/bin/slirp-fullbolt init=$(pwd)/.travis.d/docker.sh WORKDIR=$(pwd) HOME=$(pwd) PATH=$PATH &"
+  - "while ! docker info ; do sleep 2; done"
 
 script:
   - "docker run -ti --publish 8000:8000 --volume $(pwd):/app_data --workdir /app_data centos python -m SimpleHTTPServer 8000"
