@@ -4,6 +4,7 @@ env:
   global:
     - "HOST_IP=$(/sbin/ifconfig venet0:0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}')"
     - DOCKER_HOST=tcp://$HOST_IP:2375
+    - "SLIRP_PORTS=80,2375"
 
 before_install:
   - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
@@ -27,7 +28,5 @@ script:
   - sleep 5
   - docker ps -a
   - docker logs $(docker ps -aq)
-  - ip addr
-  - ifconfig
   - echo $HOST_IP
   - curl -L $HOST_IP:8000 || true
