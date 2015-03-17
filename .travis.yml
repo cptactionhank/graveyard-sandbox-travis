@@ -4,8 +4,7 @@ env:
   global:
     - "HOST_IP=$(ip addr | grep 'scope global' | head -n1 | awk '{print $2}' | cut -f1  -d'/')"
     - 'DOCKER_HOST="tcp://$HOST_IP:2375"'
-    - 'DOCKER_PORT_RANGE=2375:50000'
-    - 'SLIRP_PORTS="2375 $(seq 49153 49163)"'
+    - 'SLIRP_PORTS="2375 $(seq 49153 50153)"'
 
 before_install:
   - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
