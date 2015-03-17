@@ -4,8 +4,8 @@ env:
   global:
     - "HOST_IP=$(ip addr | grep 'scope global' | head -n1 | awk '{print $2}' | cut -f1  -d'/')"
     - 'DOCKER_HOST="tcp://$HOST_IP:2375"'
-    - 'DOCKER_PORT_RANGE=2375:2500'
-    - SLIRP_PORTS=$(seq 2375 2500)
+    - 'DOCKER_PORT_RANGE=2375:50000'
+    - 'SLIRP_PORTS="2375 $(seq 49153 49163)"'
 
 before_install:
   - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
@@ -26,8 +26,8 @@ before_script:
 
 script:
   - "docker version"
-  - 'docker run -d --publish 2400:8000 --volume "$(pwd):/app_data" --workdir "/app_data" centos python -m SimpleHTTPServer 8000'
+  - 'docker run -d --publish 49153:8000 --volume "$(pwd):/app_data" --workdir "/app_data" centos python -m SimpleHTTPServer 8000'
   - 'sleep 5'
   - 'docker ps -a'
   - 'docker logs "$(docker ps -aq)"'
-  - 'curl -L "$HOST_IP:2400" || true'
+  - 'curl -L "$HOST_IP:49153" || true'
