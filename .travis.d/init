@@ -12,6 +12,7 @@ mknod -m 444 /dev/urandom c 1 9
 mount -t tmpfs none /dev/shm
 mount -t sysfs none /sys
 mount -t tmpfs none /sys/fs/cgroup
+mount -t tmpfs -o size=8g tmpfs /var/lib/docker
 for SUBSYS in memory devices cpuset cpu
 do
 mkdir /sys/fs/cgroup/$SUBSYS
@@ -26,7 +27,7 @@ ip link set eth0 up
 ip route add default via 10.1.1.254
 # This is to handle when /etc/resolv.conf -> /run/resolvconf/resolv.conf
 [ -L /etc/resolv.conf ] && {
-	mkdir -p $(dirname $(readlink --canonicalize-missing /etc/resolv.conf))
+	mkdir -p "$(dirname "$(readlink --canonicalize-missing /etc/resolv.conf)")"
 	[ -f /etc/resolv.conf ] || {
 		cat /var/log/resolv.conf > /etc/resolv.conf
 	}
