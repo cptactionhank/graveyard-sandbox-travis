@@ -32,4 +32,5 @@ script:
   - echo $HOST_IP
   - curl -L $HOST_IP:8000 || true
   - curl -L 10.2.0.15:8000 || true
-  - ls -lha ~/.docker
+  - sudo ls -lha ~/.docker || true
+  - sudo ls -lha ~root/.docker || true
