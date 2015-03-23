@@ -30,5 +30,4 @@ script:
   - docker ps -a
   - docker logs $(docker ps -aq)
   - echo $SLIRP_HOST
-  - curl -L $SLIRP_HOST:8000 || true
-  - curl -L 10.2.0.15:8000 || true
+  - curl -L $SLIRP_HOST:8000
