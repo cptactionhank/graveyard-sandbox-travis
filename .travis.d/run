@@ -25,36 +25,37 @@ mkdir $LOGDIR
 
 if [ "$1" ]; then
 	CMD="$1"
-	STDIN=/dev/null
-	STDOUT=/dev/null
-	STDERR=/dev/null
-	touch $LOGDIR/output
+	STDIN="/dev/null"
+	STDOUT="/dev/null"
+	STDERR="/dev/null"
+	touch "$LOGDIR/output"
 	if [ "$VERBOSE" = 1 ]; then
 		tail -f $LOGDIR/output &
 	fi
 	TAILPID=$!
 	trap '' TERM
 else
-	CMD=/bin/bash
-	STDIN=/dev/stdin
-	STDOUT=/dev/stdout
-	STDERR=/dev/stderr
+	CMD="/bin/bash"
+	STDIN="/dev/stdin"
+	STDOUT="/dev/stdout"
+	STDERR="/dev/stderr"
 	TAILPID=""
 fi
 
-cat /etc/resolv.conf > $LOGDIR/resolv.conf
+cat "/etc/resolv.conf" > "$LOGDIR/resolv.conf"
 
 echo "$CMD" > $LOGDIR/cmd
-INITDIR="$(readlink --canonicalize $(dirname "$0"))"
-$INITDIR/uml quiet mem=3G rootfstype=hostfs rootflags=/ ro \
+INITDIR="$(readlink --canonicalize "$(dirname "$0")")"
+"$INITDIR/uml" quiet mem=3G rootfstype=hostfs rootflags=/ ro \
 	eth0="slirp,,$INITDIR/slirp-wrapper" \
 	init="$INITDIR/init" LOGDIR="$LOGDIR" \
-	<$STDIN >$STDOUT 2>$STDERR
+	<"$STDIN" >"$STDOUT" 2>"$STDERR"
 
 # Due to a weird behavior of usermodelinux, sometimes it will kill the
 # whole process group, and we won't have to kill tail. Duh.
-[ "$TAILPID" ] && [ -d /proc/$TAILPID ] && 
-	/bin/kill $TAILPID >/dev/null 2>/dev/null
+if [ "$TAILPID" ] && [ -d /proc/$TAILPID ]; then
+	/bin/kill "$TAILPID" >"/dev/null" 2>"/dev/null"
+fi
 
 STATUS=""
 [ -f "$LOGDIR/status" ] && STATUS="$(cat $LOGDIR/status)"
