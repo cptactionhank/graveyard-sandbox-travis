@@ -4,7 +4,7 @@ if [ -z "$SLIRP_PORTS" ]
 then
     exec slirp-fullbolt "$@"
 else
-    tmp=$(mktemp /tmp/slirp.XXXX)
+    tmp="$(mktemp "/tmp/slirp.XXXX")"
 
     echo 'exec slirp-fullbolt "host addr $HOST_IP" \\' > $tmp
     for i in $SLIRP_PORTS

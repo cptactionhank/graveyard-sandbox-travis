@@ -20,8 +20,8 @@ if [ -n "$SLIRP_PORTS" ] && [ -z "$HOST_IP" ]; then
   exit 255
 fi
 
-LOGDIR=/tmp/log.$$
-mkdir $LOGDIR
+LOGDIR="/tmp/log.$$"
+mkdir "$LOGDIR"
 
 if [ "$1" ]; then
 	CMD="$1"
@@ -30,7 +30,7 @@ if [ "$1" ]; then
 	STDERR="/dev/null"
 	touch "$LOGDIR/output"
 	if [ "$VERBOSE" = 1 ]; then
-		tail -f $LOGDIR/output &
+		tail -f "$LOGDIR/output" &
 	fi
 	TAILPID=$!
 	trap '' TERM
@@ -58,7 +58,7 @@ if [ "$TAILPID" ] && [ -d /proc/$TAILPID ]; then
 fi
 
 STATUS=""
-[ -f "$LOGDIR/status" ] && STATUS="$(cat $LOGDIR/status)"
+[ -f "$LOGDIR/status" ] && STATUS="$(cat "$LOGDIR/status")"
 [ "$DEBUG" ] || rm -rf "$LOGDIR"
 [ "$STATUS" ] && exit "$STATUS"
 exit 255
