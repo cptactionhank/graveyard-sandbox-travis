@@ -2,8 +2,8 @@ language: bash
 
 env:
   global:
-    - "HOST_IP=$(/sbin/ifconfig venet0:0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}')"
-    - 'DOCKER_HOST="tcp://$HOST_IP:2375"'
+    - "SLIRP_HOST=$(/sbin/ifconfig venet0:0 | grep 'inet addr' | awk -F: '{print $2}' | awk '{print $1}')"
+    - 'DOCKER_HOST="tcp://$SLIRP_HOST:2375"'
     - 'SLIRP_PORTS="2375 8000 $(seq 49153 49253)"'
 
 before_install:
@@ -29,8 +29,6 @@ script:
   - sleep 5
   - docker ps -a
   - docker logs $(docker ps -aq)
-  - echo $HOST_IP
-  - curl -L $HOST_IP:8000 || true
+  - echo $SLIRP_HOST
+  - curl -L $SLIRP_HOST:8000 || true
   - curl -L 10.2.0.15:8000 || true
-  - sudo ls -lha ~/.docker || true
-  - sudo ls -lha ~root/.docker || true

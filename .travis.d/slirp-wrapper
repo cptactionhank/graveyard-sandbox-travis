@@ -1,4 +1,5 @@
 #!/bin/sh
+HOST_IP=${$SLIRP_HOST:-}
 
 if [ -z "$SLIRP_PORTS" ]
 then

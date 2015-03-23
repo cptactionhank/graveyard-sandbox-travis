@@ -1,4 +1,5 @@
 #!/bin/sh
+HOST_IP=${$SLIRP_HOST:-}
 
 REQUIREMENTS="/sbin/ip /usr/bin/slirp-fullbolt"
 for R in $REQUIREMENTS; do
