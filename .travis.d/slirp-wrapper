@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+SLIRP_OPTIONS=()
 
 if [ ! -z "$HOST_IP" ]; then
 	echo "DEPRECATED USE OF ENVIRONMENT VARIABLE, CONSIDER SWITCHING TO SLIRP_HOST AS SOON AS POSSIBLE."
@@ -7,12 +9,12 @@ fi
 
 if [ ! -z "$SLIRP_PORTS" ]; then
 	if [ ! -z "$SLIRP_HOST" ]; then
-		SLIRP_OPTIONS="""host addr $SLIRP_HOST"" $SLIRP_OPTIONS"
+		SLIRP_OPTIONS+=("host addr $SLIRP_HOST")
 	fi
 
 	for i in $SLIRP_PORTS; do
-		SLIRP_OPTIONS="$SLIRP_OPTIONS ""redir $i 10.1.1.1:$i"""
+		SLIRP_OPTIONS+=("redir $i 10.1.1.1:$i")
 	done
 fi
 
-exec slirp-fullbolt ${SLIRP_OPTIONS} "$@"
+exec slirp-fullbolt "${SLIRP_OPTIONS[@]}" "$@"
