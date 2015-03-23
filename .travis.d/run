@@ -1,5 +1,4 @@
 #!/bin/sh
-HOST_IP="$SLIRP_HOST"
 
 REQUIREMENTS="/sbin/ip /usr/bin/slirp-fullbolt"
 for R in $REQUIREMENTS; do
@@ -11,12 +10,17 @@ done
 
 if [ "$2" ]; then
 	shift
-	echo "Extraneous arguments: $*"
-	echo "Try to enclose them within quotes?"
+	echo "Extraneous arguments: $* Try to enclose them within quotes?"
 	exit 255
 fi
 
-if [ -n "$SLIRP_PORTS" ] && [ -z "$HOST_IP" ]; then
+# backwards compatability...
+if [ ! -z "$HOST_IP" ]; then
+	echo "DEPRECATED USE OF ENVIRONMENT VARIABLE, CONSIDER SWITCHING TO SLIRP_HOST AS SOON AS POSSIBLE."
+	SLIRP_HOST="$HOST_IP"
+fi
+
+if [ -n "$SLIRP_PORTS" ] && [ "x$SLIRP_HOST" = "x" ]; then
   echo "The HOST_IP must be defined to setup redirects with SLIRP_PORTS."
   exit 255
 fi
@@ -33,7 +37,7 @@ if [ "$1" ]; then
 	if [ "$VERBOSE" = 1 ]; then
 		tail -f "$LOGDIR/output" &
 	fi
-	TAILPID=$!
+	TAILPID="$!"
 	trap '' TERM
 else
 	CMD="/bin/bash"
@@ -47,7 +51,7 @@ cat "/etc/resolv.conf" > "$LOGDIR/resolv.conf"
 
 echo "$CMD" > $LOGDIR/cmd
 INITDIR="$(readlink --canonicalize "$(dirname "$0")")"
-"$INITDIR/uml" quiet rootfstype=hostfs rootflags=/ ro \
+"$INITDIR/uml" quiet rootfstype="hostfs" rootflags="/" ro \
 	mem="$(grep "MemTotal" "/proc/meminfo" | awk '{ print $2 }')K" \
 	eth0="slirp,,$INITDIR/slirp-wrapper" \
 	init="$INITDIR/init" LOGDIR="$LOGDIR" \

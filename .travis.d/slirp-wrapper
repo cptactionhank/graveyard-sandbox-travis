@@ -7,11 +7,11 @@ if [ ! -z "$HOST_IP" ]; then
 	SLIRP_HOST="$HOST_IP"
 fi
 
-if [ ! -z "$SLIRP_PORTS" ]; then
-	if [ ! -z "$SLIRP_HOST" ]; then
-		SLIRP_OPTIONS+=("host addr $SLIRP_HOST")
-	fi
+if [ ! -z "$SLIRP_HOST" ]; then
+	SLIRP_OPTIONS+=("host addr $SLIRP_HOST")
+fi
 
+if [ ! -z "$SLIRP_PORTS" ]; then
 	for i in $SLIRP_PORTS; do
 		SLIRP_OPTIONS+=("redir $i 10.1.1.1:$i")
 	done
