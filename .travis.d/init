@@ -27,13 +27,10 @@ cgroups-mount
 # some storage for docker
 mkdir -p "/var/lib/docker"
 mount none "/var/lib/docker" -t hostfs -o "/var/lib/docker"
-# mount none /var/lib/docker -t hostfs -o $DOCKER_STORAGE
-# mount -t tmpfs -o size=8g tmpfs /var/lib/docker
 
 mount -t hostfs -o "$LOGDIR" none "/var/log"
 mount -t tmpfs none "/var/lib/docker"
 
-echo "1" > "/proc/sys/net/ipv4/ip_forward"
 # echo 0 > /proc/sys/kernel/printk
 
 # configure networking
@@ -42,18 +39,20 @@ ip link set lo up
 ip addr add 10.1.1.1/24 dev eth0
 ip link set eth0 up
 ip route add default via 10.1.1.254
+echo "1" > "/proc/sys/net/ipv4/ip_forward"
 
 # This is to handle when /etc/resolv.conf -> /run/resolvconf/resolv.conf
-[ -L "/etc/resolv.conf" ] && {
+if [ -L "/etc/resolv.conf" ]; then
 	mkdir -p "$(dirname "$(readlink --canonicalize-missing "/etc/resolv.conf")")"
 	[ -f "/etc/resolv.conf" ] || {
 		cat "/var/log/resolv.conf" > "/etc/resolv.conf"
 	}
-}
-[ -f "/var/log/output" ] && {
+fi
+if [ -f "/var/log/output" ]; then
 	exec >> "/var/log/output"
 	exec 2>> "/var/log/output"
-}
+fi
+
 sh "/var/log/cmd"
 echo "$?" >"/var/log/status"
 # This will make sure that the main "tail" process had the opportunity
