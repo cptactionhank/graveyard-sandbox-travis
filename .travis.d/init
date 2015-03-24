@@ -1,47 +1,41 @@
 #!/bin/sh
 
 # configure path to include /usr/local
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 # can't do much without proc!
-mount -t proc none /proc
+mount -t proc none "/proc"
 
 # pseudo-terminal devices
-mkdir -p /dev/pts
-mount -t devpts none /dev/pts
+mkdir -p "/dev/pts"
+mount -t devpts none "/dev/pts"
 
 # shared memory a good idea
-mkdir -p /dev/shm
-mount -t tmpfs none /dev/shm
+mkdir -p "/dev/shm"
+mount -t tmpfs none "/dev/shm"
 
 # sysfs a good idea
-mount -t sysfs none /sys
+mount -t sysfs none "/sys"
 
 # pidfiles and such like
-mkdir -p /var/run
-mount -t tmpfs none /var/run
+mkdir -p "/var/run"
+mount -t tmpfs none "/var/run"
 
 # takes the pain out of cgroups
 cgroups-mount
-# mount -t tmpfs none /sys/fs/cgroup
-# for SUBSYS in memory devices cpuset cpu; do
-# 	mkdir /sys/fs/cgroup/$SUBSYS
-# 	mount -t cgroup -o $SUBSYS none /sys/fs/cgroup/$SUBSYS
-# done
 
 # some storage for docker
-mkdir -p /var/lib/docker
-mount none /var/lib/docker -t hostfs -o /var/lib/docker
+mkdir -p "/var/lib/docker"
+mount none "/var/lib/docker" -t hostfs -o "/var/lib/docker"
 # mount none /var/lib/docker -t hostfs -o $DOCKER_STORAGE
 # mount -t tmpfs -o size=8g tmpfs /var/lib/docker
 
 mount -t tmpfs none "/tmp"
 mount -t hostfs -o "$LOGDIR" none "/var/log"
 mount -t tmpfs none "/var/lib/docker"
-mknod -m 444 /dev/urandom c 1 9
 
-echo 1 > /proc/sys/net/ipv4/ip_forward
-echo 0 > /proc/sys/kernel/printk
+echo "1" > "/proc/sys/net/ipv4/ip_forward"
+# echo 0 > /proc/sys/kernel/printk
 
 # configure networking
 ip addr add 127.0.0.1 dev lo
