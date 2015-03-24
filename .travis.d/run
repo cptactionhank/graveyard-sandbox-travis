@@ -2,10 +2,10 @@
 
 REQUIREMENTS="/sbin/ip /usr/bin/slirp-fullbolt"
 for R in $REQUIREMENTS; do
-	[ -x "$R" ] || {
+	if [ ! -x "$R" ]; then
 		echo "Requirement $R not found. Aborting."
 		exit 1
-	}
+	fi
 done
 
 if [ "$2" ]; then
