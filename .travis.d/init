@@ -35,9 +35,9 @@ mount none /var/lib/docker -t hostfs -o /var/lib/docker
 # mount none /var/lib/docker -t hostfs -o $DOCKER_STORAGE
 # mount -t tmpfs -o size=8g tmpfs /var/lib/docker
 
-mount -t tmpfs none /tmp
-mount -t hostfs -o $LOGDIR none /var/log
-mount -t tmpfs none /var/lib/docker
+mount -t tmpfs none "/tmp"
+mount -t hostfs -o "$LOGDIR" none "/var/log"
+mount -t tmpfs none "/var/lib/docker"
 mknod -m 444 /dev/urandom c 1 9
 
 echo 1 > /proc/sys/net/ipv4/ip_forward
