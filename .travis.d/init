@@ -30,7 +30,6 @@ mount none "/var/lib/docker" -t hostfs -o "/var/lib/docker"
 # mount none /var/lib/docker -t hostfs -o $DOCKER_STORAGE
 # mount -t tmpfs -o size=8g tmpfs /var/lib/docker
 
-mount -t tmpfs none "/tmp"
 mount -t hostfs -o "$LOGDIR" none "/var/log"
 mount -t tmpfs none "/var/lib/docker"
 
@@ -45,18 +44,18 @@ ip link set eth0 up
 ip route add default via 10.1.1.254
 
 # This is to handle when /etc/resolv.conf -> /run/resolvconf/resolv.conf
-[ -L /etc/resolv.conf ] && {
-	mkdir -p "$(dirname "$(readlink --canonicalize-missing /etc/resolv.conf)")"
-	[ -f /etc/resolv.conf ] || {
-		cat /var/log/resolv.conf > /etc/resolv.conf
+[ -L "/etc/resolv.conf" ] && {
+	mkdir -p "$(dirname "$(readlink --canonicalize-missing "/etc/resolv.conf")")"
+	[ -f "/etc/resolv.conf" ] || {
+		cat "/var/log/resolv.conf" > "/etc/resolv.conf"
 	}
 }
-[ -f /var/log/output ] && {
-	exec >>/var/log/output
-	exec 2>>/var/log/output
+[ -f "/var/log/output" ] && {
+	exec >> "/var/log/output"
+	exec 2>> "/var/log/output"
 }
-sh /var/log/cmd
-echo $? >/var/log/status
+sh "/var/log/cmd"
+echo "$?" >"/var/log/status"
 # This will make sure that the main "tail" process had the opportunity
 # to display everything before being killed by UML misbehavior.
 sleep 1
