@@ -53,7 +53,8 @@ if [ -f "/var/log/output" ]; then
 	exec 2>> "/var/log/output"
 fi
 
-sh "/var/log/cmd"
+# sh "/var/log/cmd"
+"$@"
 echo "$?" >"/var/log/status"
 # This will make sure that the main "tail" process had the opportunity
 # to display everything before being killed by UML misbehavior.
