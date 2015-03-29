@@ -8,12 +8,6 @@ for R in $REQUIREMENTS; do
 	fi
 done
 
-if [ "$2" ]; then
-	shift
-	echo "Extraneous arguments: $* Try to enclose them within quotes?"
-	exit 255
-fi
-
 # backwards compatability...
 if [ ! -z "$HOST_IP" ]; then
 	echo "DEPRECATED USE OF ENVIRONMENT VARIABLE, CONSIDER SWITCHING TO SLIRP_HOST AS SOON AS POSSIBLE."
