@@ -9,8 +9,8 @@ env:
 before_install:
   - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
   - sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-  - echo exit 101 | sudo tee /usr/sbin/policy-rc.d
-  - sudo chmod +x /usr/sbin/policy-rc.d
+  # - echo exit 101 | sudo tee /usr/sbin/policy-rc.d
+  # - sudo chmod +x /usr/sbin/policy-rc.d
 
 install:
   - sudo apt-get -y update
@@ -20,7 +20,7 @@ install:
   - chmod +x .travis.d/uml
 
 before_script:
-  - "sudo .travis.d/run -d docker -dD -H tcp://0.0.0.0:2375 &"
+  - "sudo .travis.d/run -d docker -d -D -H tcp://0.0.0.0:2375 &"
   - "while ! docker info; do sleep 10; done"
   - docker pull centos:latest
 

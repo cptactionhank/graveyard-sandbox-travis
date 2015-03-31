@@ -63,6 +63,9 @@ help() {
 
 cleanup_before_exit() {
   debug "Deleting $LOGDIR"
+  # print contents of all logdir files
+  find "$LOGDIR" -maxdepth 1 -type f -exec echo -e "\n\nDisplaying contents of {}\n=========================================" \; -exec cat {} \;
+  # remove the temporary log directory
   rm -rf "$LOGDIR"
 }
 trap cleanup_before_exit EXIT
